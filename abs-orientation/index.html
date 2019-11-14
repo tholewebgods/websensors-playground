@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title></title>
+</head>
+<body>
+<h1>Absolute orientation sensor</h1>
+<p>
+	<h3>Quaternion:</h3>
+	<h4 id="quaternion">[0.0,0.0,0.0,0.0]</h4>
+</p>
+
+<script type="text/javascript">
+function fail(msg) {
+	const el = document.querySelector("#quaternion");
+	el.textContent = "Sensor is not available.";
+}
+
+function start() {
+	const el = document.querySelector("#quaternion");
+	const options = {
+		frequency: 60,
+		referenceFrame: 'device'
+	};
+	const sensor = new AbsoluteOrientationSensor(options);
+
+	sensor.addEventListener('reading', () => {
+		el.textContent = `[${sensor.quaternion.map((d) => d.toFixed(5)).join(",")}]`;
+	});
+
+	sensor.addEventListener('error', error => {
+		if (event.error.name == 'NotReadableError') {
+			fail("Sensor is not available.");
+		} else {
+			fail(`Other error occured: ${event.error.toString()}`);
+		}
+	});
+
+	sensor.start();
+}
+
+function main() {
+	Promise.all([
+		navigator.permissions.query({ name: "accelerometer" }),
+		navigator.permissions.query({ name: "magnetometer" }),
+		navigator.permissions.query({ name: "gyroscope" })
+	]).then((results) => {
+		if (results.every(result => result.state === "granted")) {
+			start();
+		} else {
+			fail("No permissions to use AbsoluteOrientationSensor.");
+		}
+	});
+}
+
+window.onload = main;
+</script>
+</body>
+</html>
