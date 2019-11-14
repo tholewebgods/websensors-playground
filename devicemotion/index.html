@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title></title>
+</head>
+<body>
+<h1>Devicemotion</h1>
+<p>
+	<h3>Axis:</h3>
+	<h4 id="axis">x=0.00 y=0.00 z=0.00</h4>
+</p>
+
+<script type="text/javascript">
+function main() {
+	const el = document.querySelector("#axis");
+
+	window.ondevicemotion = (e) => {
+		const acceleration = e.acceleration;
+
+		if (!acceleration.x || !acceleration.y || !acceleration.z) {
+			el.textContent = `x=? y=? z=?`;
+			return;
+		}
+
+		el.textContent = `x=${acceleration.x.toFixed(5)} y=${acceleration.y.toFixed(5)} z=${acceleration.z.toFixed(5)}`;
+	};
+}
+
+window.onload = main;
+</script>
+</body>
+</html>
