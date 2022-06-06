@@ -21,6 +21,7 @@
 		<span id="qi">i=0.000</span>
 		<span id="qj">j=0.000</span>
 		<span id="qk">q=0.000</span>
+		<span id="aaTheta">θ=0.0</span>
 	</h4>
 </p>
 
@@ -30,11 +31,22 @@ function fail(msg) {
 	el.textContent = "Sensor is not available.";
 }
 
+/**
+ * Get the axis angle rotation.
+ *
+ * See https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation#Recovering_the_axis-angle_representation
+ */
+function axisAngleRotation(quaternion) {
+	const [qr, qi, qj, qk] = quaternion;
+	return 2 * Math.atan2(Math.sqrt(qi**2 + qj**2 + qk**2), qr) * 180 / Math.PI;
+}
+
 function start() {
 	const qrEl = document.querySelector("#qr");
 	const qiEl = document.querySelector("#qi");
 	const qjEl = document.querySelector("#qj");
 	const qkEl = document.querySelector("#qk");
+	const aaThetaEl = document.querySelector("#aaTheta");
 	const options = {
 		frequency: 60,
 		referenceFrame: 'device'
@@ -46,6 +58,9 @@ function start() {
 		qiEl.textContent = `i=${sensor.quaternion[1].toFixed(3)}`;
 		qjEl.textContent = `j=${sensor.quaternion[2].toFixed(3)}`;
 		qkEl.textContent = `k=${sensor.quaternion[3].toFixed(3)}`;
+
+		const theta = axisAngleRotation(sensor.quaternion);
+		aaThetaEl.textContent = `θ=${theta.toFixed(1)}`;
 	});
 
 	sensor.addEventListener('error', error => {
