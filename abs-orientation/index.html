@@ -4,12 +4,24 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<title></title>
+	<style type="text/css">
+		h4 span {
+			display: block;
+			width: 70px;
+			text-align: right;
+		}
+	</style>
 </head>
 <body>
 <h1>Absolute orientation sensor</h1>
 <p>
 	<h3>Quaternion:</h3>
-	<h4 id="quaternion">[0.0,0.0,0.0,0.0]</h4>
+	<h4 id="quaternion">
+		<span id="qr">r=0.000</span>
+		<span id="qi">i=0.000</span>
+		<span id="qj">j=0.000</span>
+		<span id="qk">q=0.000</span>
+	</h4>
 </p>
 
 <script type="text/javascript">
@@ -19,7 +31,10 @@ function fail(msg) {
 }
 
 function start() {
-	const el = document.querySelector("#quaternion");
+	const qrEl = document.querySelector("#qr");
+	const qiEl = document.querySelector("#qi");
+	const qjEl = document.querySelector("#qj");
+	const qkEl = document.querySelector("#qk");
 	const options = {
 		frequency: 60,
 		referenceFrame: 'device'
@@ -27,7 +42,10 @@ function start() {
 	const sensor = new AbsoluteOrientationSensor(options);
 
 	sensor.addEventListener('reading', () => {
-		el.textContent = `[${sensor.quaternion.map((d) => d.toFixed(5)).join(",")}]`;
+		qrEl.textContent = `r=${sensor.quaternion[0].toFixed(3)}`;
+		qiEl.textContent = `i=${sensor.quaternion[1].toFixed(3)}`;
+		qjEl.textContent = `j=${sensor.quaternion[2].toFixed(3)}`;
+		qkEl.textContent = `k=${sensor.quaternion[3].toFixed(3)}`;
 	});
 
 	sensor.addEventListener('error', error => {

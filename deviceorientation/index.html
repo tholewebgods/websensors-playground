@@ -4,20 +4,35 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<title></title>
+	<style type="text/css">
+		h4 span {
+			display: block;
+			width: 70px;
+			text-align: right;
+		}
+	</style>
 </head>
 <body>
 <h1>Deviceorientation</h1>
 <p>
 	<h3>Angles:</h3>
-	<h4 id="axis">α=0.00 β=0.00 γ=0.00</h4>
+	<h4 id="axis">
+		<span id="alpha">α=0.0</span>
+		<span id="beta">β=0.0</span>
+		<span id="gamma">γ=0.0</span>
+	</h4>
 </p>
 
 <script type="text/javascript">
 function main() {
-	const el = document.querySelector("#axis");
+	const alphaEl = document.querySelector("#alpha");
+	const betaEl = document.querySelector("#beta");
+	const gammaEl = document.querySelector("#gamma");
 
 	window.ondeviceorientation = (e) => {
-		el.textContent = `α=${e.alpha.toFixed(5)} β=${e.beta.toFixed(5)} γ=${e.gamma.toFixed(5)}`;
+		alphaEl.textContent = `α=${e.alpha.toFixed(1)}`;
+		betaEl.textContent = `β=${e.beta.toFixed(1)}`;
+		gammaEl.textContent = `γ=${e.gamma.toFixed(1)}`;
 	};
 }
 

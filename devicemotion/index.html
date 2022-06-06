@@ -4,27 +4,44 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<title></title>
+	<style type="text/css">
+		h4 span {
+			display: block;
+			width: 70px;
+			text-align: right;
+		}
+	</style>
 </head>
 <body>
 <h1>Devicemotion</h1>
 <p>
 	<h3>Axis:</h3>
-	<h4 id="axis">x=0.00 y=0.00 z=0.00</h4>
+	<h4 id="axis">
+		<span id="x">x=0.00</span>
+		<span id="y">y=0.00</span>
+		<span id="z">z=0.00</span>
+	</h4>
 </p>
 
 <script type="text/javascript">
 function main() {
-	const el = document.querySelector("#axis");
+	const xEl = document.querySelector("#x");
+	const yEl = document.querySelector("#y");
+	const zEl = document.querySelector("#z");
 
 	window.ondevicemotion = (e) => {
 		const acceleration = e.acceleration;
 
 		if (!acceleration.x || !acceleration.y || !acceleration.z) {
-			el.textContent = `x=? y=? z=?`;
+			xEl.textContent = `x=?`;
+			yEl.textContent = `y=?`;
+			zEl.textContent = `z=?`;
 			return;
 		}
 
-		el.textContent = `x=${acceleration.x.toFixed(5)} y=${acceleration.y.toFixed(5)} z=${acceleration.z.toFixed(5)}`;
+		xEl.textContent = `x=${acceleration.x.toFixed(2)}`;
+		yEl.textContent = `y=${acceleration.y.toFixed(2)}`;
+		zEl.textContent = `z=${acceleration.z.toFixed(2)}`;
 	};
 }
 
