@@ -21,6 +21,12 @@
 		<span id="y">y=0.00</span>
 		<span id="z">z=0.00</span>
 	</h4>
+	<h3>Axis peak reading</h3>
+	<h4 id="axis">
+		<span id="peak-x">x=0.00</span>
+		<span id="peak-y">y=0.00</span>
+		<span id="peak-z">z=0.00</span>
+	</h4>
 </p>
 
 <script type="text/javascript">
@@ -29,17 +35,40 @@ function fail(msg) {
 	el.textContent = "Sensor is not available.";
 }
 
+/**
+ * Max value ignoring the sign.
+ */
+function maxAbs(a, b) {
+	if (Math.abs(a) > Math.abs(b)) {
+		return a;
+	}
+
+	return b;
+}
+
 function start() {
 	const xEl = document.querySelector("#x");
 	const yEl = document.querySelector("#y");
 	const zEl = document.querySelector("#z");
+	const peakXEl = document.querySelector("#peak-x");
+	const peakYEl = document.querySelector("#peak-y");
+	const peakZEl = document.querySelector("#peak-z");
 	const options = {
 		frequency: 60,
 		referenceFrame: 'device'
 	};
 	const sensor = new Accelerometer(options);
+	const peakReading = { x: 0, y: 0, z: 0 };
 
 	sensor.addEventListener('reading', () => {
+		peakXEl.textContent = `x=${peakReading.x.toFixed(2)}`;
+		peakYEl.textContent = `y=${peakReading.y.toFixed(2)}`;
+		peakZEl.textContent = `z=${peakReading.z.toFixed(2)}`;
+
+		peakReading.x = maxAbs(peakReading.x, sensor.x);
+		peakReading.y = maxAbs(peakReading.y, sensor.y);
+		peakReading.z = maxAbs(peakReading.z, sensor.z);
+
 		xEl.textContent = `x=${sensor.x.toFixed(2)}`;
 		yEl.textContent = `y=${sensor.y.toFixed(2)}`;
 		zEl.textContent = `z=${sensor.z.toFixed(2)}`;
